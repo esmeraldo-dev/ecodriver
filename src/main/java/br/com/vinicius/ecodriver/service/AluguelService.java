@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,30 @@ public class AluguelService {
 
         carro.setStatus(StatusCarro.ALUGADO);
         carroRepository.saveAndFlush(carro);
+
+        return aluguelRepository.save(aluguel);
+    }
+
+    public Aluguel devolver(Long aluguelId) {
+        Aluguel aluguel = aluguelRepository.findById(aluguelId)
+                .orElseThrow(() -> new RuntimeException("Aluguel não encontrado com o ID: " + aluguelId));
+
+        if (aluguel.getDataFim() != null) {
+            throw new RuntimeException("Este aluguel já foi finalizado.");
+        }
+        aluguel.setDataFim(LocalDateTime.now());
+
+        long dias = ChronoUnit.DAYS.between(aluguel.getDataInicio(), aluguel.getDataFim());
+        if (dias <= 1) {
+            dias = 1;
+        }
+
+        Double valorTotal = dias * aluguel.getCarro().getValorDiaria();
+        aluguel.setValorTotal(valorTotal);
+
+        Carro carro = aluguel.getCarro();
+        carro.setStatus(StatusCarro.DISPONIVEL);
+        carroRepository.save(carro);
 
         return aluguelRepository.save(aluguel);
     }
