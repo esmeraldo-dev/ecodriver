@@ -31,6 +31,10 @@ public class Aluguel {
     @JoinColumn(name = "carro_id", nullable = false)
     private Carro carro;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     @Column(nullable = false)
     private LocalDateTime dataInicio;
 
