@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import lombok.Setter;
 @Table(name = "tb_usuarios")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
@@ -37,5 +39,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     private Role role = Role.CLIENTE;
+
+    private String telefone;
 
 }
