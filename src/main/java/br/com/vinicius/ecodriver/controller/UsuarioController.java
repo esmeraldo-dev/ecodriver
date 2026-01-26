@@ -1,5 +1,6 @@
 package br.com.vinicius.ecodriver.controller;
 
+import br.com.vinicius.ecodriver.dto.UsuarioResponseDTO;
 import br.com.vinicius.ecodriver.model.Usuario;
 import br.com.vinicius.ecodriver.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -23,25 +24,32 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(201).body(usuarioService.salvarUsuario(usuario));
+    public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@RequestBody Usuario usuario) {
+        Usuario salvo = usuarioService.salvarUsuario(usuario);
+        return ResponseEntity.status(201).body(new UsuarioResponseDTO(salvo));
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuario>> listarTodosOsUsuarios() {
-        return ResponseEntity.ok(usuarioService.listarTodosOsUsuarios());
+    public ResponseEntity<List<UsuarioResponseDTO>> listarTodosOsUsuarios() {
+        List<UsuarioResponseDTO> usuario = usuarioService.listarTodosOsUsuarios()
+                .stream()
+                .map(UsuarioResponseDTO::new)
+                .toList();
+
+        return ResponseEntity.ok(usuario);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> listarUsuariosPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioService.buscarPorId(id));
+    public ResponseEntity<UsuarioResponseDTO> listarUsuariosPorId(@PathVariable Long id) {
+        Usuario usuario = usuarioService.buscarPorId(id);
+        return ResponseEntity.ok(new UsuarioResponseDTO(usuario));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id,
-                                                    @RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@PathVariable Long id,
+                                                               @RequestBody Usuario usuario) {
         Usuario atualizado = usuarioService.atualizarUsuarioPorId(id, usuario);
-        return ResponseEntity.ok(atualizado);
+        return ResponseEntity.ok(new UsuarioResponseDTO(atualizado));
     }
 
     @DeleteMapping("/{id}")

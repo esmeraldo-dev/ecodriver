@@ -1,5 +1,6 @@
 package br.com.vinicius.ecodriver.controller;
 
+import br.com.vinicius.ecodriver.dto.CarroResponseDTO;
 import br.com.vinicius.ecodriver.model.Carro;
 import br.com.vinicius.ecodriver.service.CarroService;
 import lombok.RequiredArgsConstructor;
@@ -23,23 +24,29 @@ public class CarroController {
     private final CarroService carroService;
 
     @PostMapping
-    public ResponseEntity<Carro> cadastrarCarro(@RequestBody Carro carro){
-        return ResponseEntity.status(201).body(carroService.salvarCarro(carro));
+    public ResponseEntity<CarroResponseDTO> cadastrarCarro(@RequestBody Carro carro){
+        Carro carroSalvo = carroService.salvarCarro(carro);
+        return ResponseEntity.status(201).body(new CarroResponseDTO(carroSalvo));
     }
     @GetMapping
-    public ResponseEntity<List<Carro>> listarCarro(){
-        return ResponseEntity.ok(carroService.listarTodosOsCarros());
+    public ResponseEntity<List<CarroResponseDTO>> listarCarro(){
+        List<CarroResponseDTO> lista = carroService.listarTodosOsCarros()
+                .stream()
+                .map(CarroResponseDTO::new)
+                .toList();
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Carro> buscarCarroPorId(@PathVariable Long id){
-        return ResponseEntity.ok(carroService.buscarPorId(id));
+    public ResponseEntity<CarroResponseDTO> buscarCarroPorId(@PathVariable Long id){
+        Carro carro = carroService.buscarPorId(id);
+        return ResponseEntity.ok(new CarroResponseDTO(carro));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Carro> atualizarCarro(@PathVariable Long id,
-                                                @RequestBody Carro carro){
+    public ResponseEntity<CarroResponseDTO> atualizarCarro(@PathVariable Long id,
+                                                           @RequestBody Carro carro){
         Carro atualiazado = carroService.atualizarCarroPorId(id, carro);
-        return ResponseEntity.ok(atualiazado);
+        return ResponseEntity.ok(new CarroResponseDTO(atualiazado));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCarroPorId(@PathVariable Long id){
