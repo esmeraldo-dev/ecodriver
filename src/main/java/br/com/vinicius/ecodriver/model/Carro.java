@@ -48,4 +48,9 @@ public class Carro {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
+    @Column(nullable = true)
+    private Double totalKwhConsumido;
+
+    @Column(nullable = true)
+    private Double kmRodados;
 }

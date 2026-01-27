@@ -10,7 +10,10 @@ public record CarroResponseDTO(
         String modelo,
         String placa,
         Double valorDiaria,
-        StatusCarro status
+        StatusCarro status,
+        Double totalKwhConsumido,
+        Double kmRodados,
+        String proprietarioEmail
 ) {
     public CarroResponseDTO(Carro carro) {
         this(
@@ -19,7 +22,10 @@ public record CarroResponseDTO(
                 carro.getModelo(),
                 carro.getPlaca(),
                 carro.getValorDiaria(),
-                carro.getStatus()
+                carro.getStatus(),
+                carro.getTotalKwhConsumido(),
+                carro.getKmRodados(),
+                carro.getUsuario() != null ? carro.getUsuario().getEmail() : "Sem proprietário"
         );
     }
 }

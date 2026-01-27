@@ -57,4 +57,18 @@ public class CarroService {
         carroRepository.deleteById(id);
     }
 
+    public String calcularEficiencia(Long id) {
+        Carro carro = buscarPorId(id);
+
+        if (carro.getTotalKwhConsumido() == null || carro.getTotalKwhConsumido() <= 0) {
+            return "Dados de consumo insuficientes para calcular.";
+        }
+
+        double eficiencia = carro.getKmRodados() / carro.getTotalKwhConsumido();
+
+        // Retorna formatado para o usuário
+        return String.format("A eficiência do seu %s é de %.2f km/kWh.",
+                carro.getModelo(), eficiencia);
+    }
+
 }

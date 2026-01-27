@@ -44,6 +44,12 @@ public class CarroController {
         return ResponseEntity.ok(new CarroResponseDTO(carro));
     }
 
+    @GetMapping("/{id}/eficiencia")
+    public ResponseEntity<String> consultarEficiencia(@PathVariable Long id) {
+        String resultado = carroService.calcularEficiencia(id);
+        return ResponseEntity.ok(resultado);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<CarroResponseDTO> atualizarCarro(@PathVariable Long id,
                                                            @RequestBody Carro carro) {
