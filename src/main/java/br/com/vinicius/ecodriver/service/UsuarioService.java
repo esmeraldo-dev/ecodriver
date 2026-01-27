@@ -3,6 +3,7 @@ package br.com.vinicius.ecodriver.service;
 import br.com.vinicius.ecodriver.model.Usuario;
 import br.com.vinicius.ecodriver.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,26 +12,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsuarioService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     public Usuario salvarUsuario(Usuario usuario) {
-        if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
+
+        if (usuario.getEmail() == null) {
+            throw new RuntimeException("O e-mail não pode ser nulo.");
+        }
+
+        if (repository.findByEmail(usuario.getEmail()).isPresent()) {
             throw new RuntimeException("Este e-mail já está em uso.");
         }
-        return usuarioRepository.save(usuario);
+
+        String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaCriptografada);
+        return repository.save(usuario);
     }
 
     public List<Usuario> listarTodosOsUsuarios() {
-        return usuarioRepository.findAll();
+        return repository.findAll();
     }
 
     public Usuario buscarPorId(Long id) {
-        return usuarioRepository.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
     }
 
     public Usuario atualizarUsuarioPorId(Long id, Usuario usuario) {
-        Usuario usuarioEntity = usuarioRepository.findById(id).orElseThrow(() ->
+        Usuario usuarioEntity = repository.findById(id).orElseThrow(() ->
                 new RuntimeException("Usuário não encontrado com o ID: " + id)
         );
         Usuario usuarioAtualizado = Usuario.builder()
@@ -41,13 +51,13 @@ public class UsuarioService {
                 .id(usuarioEntity.getId())
                 .build();
 
-        return usuarioRepository.saveAndFlush(usuarioAtualizado);
+        return repository.saveAndFlush(usuarioAtualizado);
     }
 
     public void deletarUsuarioPorId(Long id) {
-        if (!usuarioRepository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw new RuntimeException("Usuário não encontrado com o ID: " + id);
         }
-        usuarioRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }

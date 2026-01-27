@@ -25,6 +25,7 @@ public class UsuarioController {
 
     @PostMapping
     public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@RequestBody Usuario usuario) {
+        System.out.println("DEBUG - Email recebido: " + usuario.getEmail());
         Usuario salvo = usuarioService.salvarUsuario(usuario);
         return ResponseEntity.status(201).body(new UsuarioResponseDTO(salvo));
     }
