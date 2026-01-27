@@ -24,12 +24,13 @@ public class CarroController {
     private final CarroService carroService;
 
     @PostMapping
-    public ResponseEntity<CarroResponseDTO> cadastrarCarro(@RequestBody Carro carro){
+    public ResponseEntity<CarroResponseDTO> cadastrarCarro(@RequestBody Carro carro) {
         Carro carroSalvo = carroService.salvarCarro(carro);
         return ResponseEntity.status(201).body(new CarroResponseDTO(carroSalvo));
     }
+
     @GetMapping
-    public ResponseEntity<List<CarroResponseDTO>> listarCarro(){
+    public ResponseEntity<List<CarroResponseDTO>> listarCarro() {
         List<CarroResponseDTO> lista = carroService.listarTodosOsCarros()
                 .stream()
                 .map(CarroResponseDTO::new)
@@ -38,18 +39,20 @@ public class CarroController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CarroResponseDTO> buscarCarroPorId(@PathVariable Long id){
+    public ResponseEntity<CarroResponseDTO> buscarCarroPorId(@PathVariable Long id) {
         Carro carro = carroService.buscarPorId(id);
         return ResponseEntity.ok(new CarroResponseDTO(carro));
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<CarroResponseDTO> atualizarCarro(@PathVariable Long id,
-                                                           @RequestBody Carro carro){
+                                                           @RequestBody Carro carro) {
         Carro atualiazado = carroService.atualizarCarroPorId(id, carro);
         return ResponseEntity.ok(new CarroResponseDTO(atualiazado));
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarCarroPorId(@PathVariable Long id){
+    public ResponseEntity<Void> deletarCarroPorId(@PathVariable Long id) {
         carroService.deletarCarroPorId(id);
         return ResponseEntity.noContent().build();
     }

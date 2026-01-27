@@ -27,7 +27,7 @@ public class CarroService {
                 .orElseThrow(() -> new RuntimeException("Carro não encontrado com o ID: " + id));
     }
 
-    public Carro atualizarCarroPorId (Long id, Carro carro) {
+    public Carro atualizarCarroPorId(Long id, Carro carro) {
         Carro carroEntity = carroRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Carro não encontrado com o ID: " + id)
         );
@@ -44,7 +44,7 @@ public class CarroService {
     }
 
     public void deletarCarroPorId(Long id) {
-        if(!carroRepository.existsById(id)) {
+        if (!carroRepository.existsById(id)) {
             throw new RuntimeException("Carro não encontrado com o ID: " + id);
         }
         carroRepository.deleteById(id);

@@ -7,9 +7,9 @@ import br.com.vinicius.ecodriver.model.Usuario;
 import br.com.vinicius.ecodriver.repository.AluguelRepository;
 import br.com.vinicius.ecodriver.repository.CarroRepository;
 import br.com.vinicius.ecodriver.repository.UsuarioRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -27,7 +27,7 @@ public class AluguelService {
         Carro carro = carroRepository.findById(carroId)
                 .orElseThrow(() -> new RuntimeException("Carro não encontrado com o ID: " + carroId));
 
-        if (!carro.getStatus().equals(StatusCarro.DISPONIVEL)){
+        if (!carro.getStatus().equals(StatusCarro.DISPONIVEL)) {
             throw new RuntimeException("Este carro não está disponível para locação no momento.");
         }
 
