@@ -22,4 +22,15 @@ public class RestExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
     }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ErroResponseDTO> handleNotFound(Exception ex, HttpServletRequest request) {
+        ErroResponseDTO erro = new ErroResponseDTO(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso não encontrado no servidor.",
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
 }

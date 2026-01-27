@@ -1,6 +1,7 @@
 package br.com.vinicius.ecodriver.service;
 
 import br.com.vinicius.ecodriver.model.Carro;
+import br.com.vinicius.ecodriver.model.Usuario;
 import br.com.vinicius.ecodriver.repository.CarroRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,12 @@ public class CarroService {
     private final CarroRepository carroRepository;
 
     public Carro salvarCarro(Carro carro) {
+        Usuario usuarioLogado = (Usuario) org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+
+        carro.setUsuario(usuarioLogado);
         carro.setPlaca(carro.getPlaca().toUpperCase());
+
         return carroRepository.save(carro);
     }
 
@@ -38,6 +44,7 @@ public class CarroService {
                 .placa(carro.getPlaca() != null ? carro.getPlaca().toUpperCase() : carroEntity.getPlaca())
                 .status(carro.getStatus() != null ? carro.getStatus() : carroEntity.getStatus())
                 .id(carroEntity.getId())
+                .usuario(carroEntity.getUsuario())
                 .build();
 
         return carroRepository.saveAndFlush(carroAtualizado);
