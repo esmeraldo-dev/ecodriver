@@ -16,7 +16,7 @@ O **EcoDriver** é uma API REST desenvolvida para o gerenciamento inteligente de
 
 O projeto foi construído utilizando as melhores práticas do mercado para desenvolvimento Java Backend:
 
-* **Java 17**: Linguagem moderna e performática.
+* **Java 21**: Linguagem moderna e performática.
 * **Spring Boot 3**: Framework para desenvolvimento ágil.
 * **Spring Security + JWT**: Autenticação e autorização robusta (Stateless).
 * **PostgreSQL**: Banco de dados relacional para persistência segura.
